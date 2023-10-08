@@ -1,0 +1,35 @@
+[project]
+name = "sox"
+version = "0.0.1"
+authors = [
+    {name = "Ali Hemmatifar", email = "alihemmati19@gmail.com"},
+]
+description = "Playground for exploring battery state estimation methods."
+readme = "README.md"
+dependencies = [
+    "pybamm",
+    "filterpy",
+    "jupyter",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black[jupyter]",
+    "ruff",
+    "mypy",
+    "pre-commit",
+    "pytest",
+    "pytest-cov",
+]
+
+[tool.black]
+line-length = 120
+
+[tool.ruff]
+line-length = 120
+
+[tool.mypy]
+exclude = [
+    "venv",
+    ".venv",
+]
