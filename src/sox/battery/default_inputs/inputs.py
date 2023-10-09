@@ -38,7 +38,7 @@ def entropic_change(ocv, temperature):
     return pb.Interpolant(x, y, [ocv, temperature], name)
 
 
-default_parameters = Inputs(
+inputs = Inputs(
     # electrical properties
     rc_pairs=1,
     initial_rc_voltage=[0.0],
