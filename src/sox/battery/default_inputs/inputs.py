@@ -42,8 +42,8 @@ inputs = Inputs(
     # electrical properties
     rc_pairs=1,
     initial_rc_voltage=[0.0],
-    voltage_high_cut=4.2,
-    voltage_low_cut=3.2,
+    voltage_high_cut=4.5,
+    voltage_low_cut=2.5,
     capacity=10,
     initial_soc=0.5,
     open_circuit_voltage=open_circuit_voltage,

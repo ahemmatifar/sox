@@ -120,3 +120,46 @@ def multi_pulse_train(
         ]
     )
     return pb.Experiment(pulse_steps * number_of_pulses, period=f"{sampling_time_s} seconds")
+
+
+def dst_schedule(
+    peak_power: float,
+    number_of_cycles: int = 1,
+    sampling_time_s: float = 1,
+):
+    """DST schedule from https://avt.inl.gov/sites/default/files/pdf/battery/usabc_manual_rev2.pdf"""
+    table = [
+        (16, 0),
+        (28, -12.5),
+        (12, -25),
+        (8, 12.5),
+        (16, 0),
+        (24, -12.5),
+        (12, -25),
+        (8, 12.5),
+        (16, 0),
+        (24, -12.5),
+        (12, -25),
+        (8, 12.5),
+        (16, 0),
+        (36, -12.5),
+        (8, -100),
+        (24, -62.5),
+        (8, 25),
+        (32, -25),
+        (8, 50),
+        (44, 0),
+    ]
+    steps = []
+    for time, power_level in table:
+        if power_level < 0:
+            steps.append(f"Discharge at {-power_level/100*peak_power} W for {time} seconds")
+        elif power_level > 0:
+            steps.append(f"Charge at {power_level/100*peak_power} W for {time} seconds")
+        else:
+            steps.append(f"Rest for {time} seconds")
+
+    return pb.Experiment(
+        steps * number_of_cycles,
+        period=f"{sampling_time_s} seconds",
+    )
