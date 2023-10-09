@@ -1,10 +1,10 @@
 import os
+
 import pybamm as pb
 
+from sox.battery.parameters import Inputs
 
-from sox.battery.parameters import Parameters
-
-path = os.path.join(os.path.dirname(__file__), "data")
+path = os.path.join(os.path.dirname(__file__), "")
 
 ocv_data = pb.parameters.process_1D_data("ecm_example_ocv.csv", path=path)
 r0_data = pb.parameters.process_3D_data_csv("ecm_example_r0.csv", path=path)
@@ -38,12 +38,12 @@ def entropic_change(ocv, temperature):
     return pb.Interpolant(x, y, [ocv, temperature], name)
 
 
-default_parameters = Parameters(
+default_parameters = Inputs(
     # electrical properties
     rc_pairs=1,
     initial_rc_voltage=[0.0],
-    toc_voltage_cut_off=4.2,
-    bod_voltage_cut_off=3.2,
+    voltage_high_cut=4.2,
+    voltage_low_cut=3.2,
     capacity=10,
     initial_soc=0.5,
     open_circuit_voltage=open_circuit_voltage,
@@ -54,8 +54,8 @@ default_parameters = Parameters(
     # thermal properties
     initial_temperature=300.0,
     ambient_temperature=300.0,
-    cp_cell=1000.0,
-    cp_jig=500.0,
-    h_jig=10.0,
-    h_air=10.0,
+    cth_cell=1000.0,
+    cth_jig=500.0,
+    k_cell_jig=10.0,
+    k_jig_air=10.0,
 )

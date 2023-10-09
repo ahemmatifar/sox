@@ -27,6 +27,10 @@ line-length = 120
 
 [tool.ruff]
 line-length = 120
+select = [
+    # isort
+    "I001"
+]
 
 [tool.mypy]
 exclude = [

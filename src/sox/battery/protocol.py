@@ -16,7 +16,7 @@ def cc_charge_cv_rest(
     max_voltage: float = 4.1,
     cv_hold_c_rate_limit: float = 0.05,
     rest_time_h: float = 0.5,
-    period_s: float = 1,
+    sampling_time_s: float = 1,
 ) -> pb.Experiment:
     return pb.Experiment(
         [
@@ -26,7 +26,7 @@ def cc_charge_cv_rest(
                 f"Rest for {rest_time_h} hour",
             )
         ],
-        period=f"{period_s} seconds",
+        period=f"{sampling_time_s} seconds",
     )
 
 
@@ -34,7 +34,7 @@ def cc_discharge_rest(
     c_rate: float = 1,
     min_voltage: float = 3.3,
     rest_time_h: float = 0.5,
-    period_s: float = 1,
+    sampling_time_s: float = 1,
 ) -> pb.Experiment:
     return pb.Experiment(
         [
@@ -43,7 +43,7 @@ def cc_discharge_rest(
                 f"Rest for {rest_time_h} hour",
             )
         ],
-        period=f"{period_s} seconds",
+        period=f"{sampling_time_s} seconds",
     )
 
 
@@ -57,14 +57,14 @@ def charge_discharge_cycling(
     dchg_rest_time_h: float = 0.5,
     direction: Literal["charge", "discharge"] = "discharge",
     number_of_cycles: int = 1,
-    period_s: float = 1,
+    sampling_time_s: float = 1,
 ) -> pb.Experiment:
-    charge = cc_charge_cv_rest(chg_c_rate, max_chg_voltage, chg_cv_hold_c_rate_limit, chg_rest_time_h, period_s)
-    discharge = cc_discharge_rest(dchg_c_rate, min_dchg_voltage, dchg_rest_time_h, period_s)
+    charge = cc_charge_cv_rest(chg_c_rate, max_chg_voltage, chg_cv_hold_c_rate_limit, chg_rest_time_h, sampling_time_s)
+    discharge = cc_discharge_rest(dchg_c_rate, min_dchg_voltage, dchg_rest_time_h, sampling_time_s)
     if direction == "charge":
-        return pb.Experiment(append_steps(charge, discharge) * number_of_cycles, period=f"{period_s} seconds")
+        return pb.Experiment(append_steps(charge, discharge) * number_of_cycles, period=f"{sampling_time_s} seconds")
     elif direction == "discharge":
-        return pb.Experiment(append_steps(discharge, charge) * number_of_cycles, period=f"{period_s} seconds")
+        return pb.Experiment(append_steps(discharge, charge) * number_of_cycles, period=f"{sampling_time_s} seconds")
     else:
         raise ValueError("direction must be 'charge' or 'discharge'")
 
@@ -74,7 +74,7 @@ def single_pulse(
     c_rate: float = 1,
     pulse_time_sec: float = 60,
     pulse_rest_time_sec: float = 600,
-    period_s: float = 1,
+    sampling_time_s: float = 1,
 ) -> pb.Experiment:
     return pb.Experiment(
         [
@@ -83,7 +83,7 @@ def single_pulse(
                 f"Rest for {pulse_rest_time_sec} seconds",
             )
         ],
-        period=f"{period_s} seconds",
+        period=f"{sampling_time_s} seconds",
     )
 
 
@@ -93,10 +93,10 @@ def single_pulse_train(
     pulse_time_sec: float = 60,
     pulse_rest_time_sec: float = 600,
     number_of_pulses: int = 20,
-    period_s: float = 1,
+    sampling_time_s: float = 1,
 ) -> pb.Experiment:
-    pulse_steps = single_pulse(direction, c_rate, pulse_time_sec, pulse_rest_time_sec, period_s).args[0]
-    return pb.Experiment(pulse_steps * number_of_pulses, period=f"{period_s} seconds")
+    pulse_steps = single_pulse(direction, c_rate, pulse_time_sec, pulse_rest_time_sec, sampling_time_s).args[0]
+    return pb.Experiment(pulse_steps * number_of_pulses, period=f"{sampling_time_s} seconds")
 
 
 def multi_pulse_train(
@@ -105,7 +105,7 @@ def multi_pulse_train(
     pulse_time_sec=None,
     pulse_rest_time_sec=None,
     number_of_pulses=None,
-    period_s: float = 1,
+    sampling_time_s: float = 1,
 ) -> pb.Experiment:
     pulse_steps = append_steps(
         *[
@@ -114,9 +114,9 @@ def multi_pulse_train(
                 c_rate[i],
                 pulse_time_sec[i],
                 pulse_rest_time_sec[i],
-                period_s,
+                sampling_time_s,
             )
             for i in range(len(direction))
         ]
     )
-    return pb.Experiment(pulse_steps * number_of_pulses, period=f"{period_s} seconds")
+    return pb.Experiment(pulse_steps * number_of_pulses, period=f"{sampling_time_s} seconds")
