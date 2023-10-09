@@ -9,12 +9,13 @@ class Sensor:
         self.data_iterator = iter(self.data)
 
     def apply_faults(self, time, sensor_value):
-        for fault in self.faults:
-            sensor_value = fault.apply(time, sensor_value)
+        if self.faults is not None:
+            for fault in self.faults:
+                sensor_value = fault.apply(time, sensor_value)
         return sensor_value
 
     def apply_noise(self, sensor_value):
-        if self.noise:
+        if self.noise is not None:
             sensor_value = self.noise.apply(sensor_value)
         return sensor_value
 
