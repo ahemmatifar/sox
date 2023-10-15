@@ -1,0 +1,89 @@
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore virtual environment files (if using virtualenv or venv)
+venv/
+.venv/
+*.pyc
+.Python
+
+# Ignore local development configuration
+.env
+
+# Ignore system and text editor temporary files
+.vscode/
+.idea/
+*.swp
+
+# Ignore built Python distributions
+/dist/
+/build/
+
+# Ignore compiled Python files
+*.pyo
+*.pyd
+
+# Ignore log files
+*.log
+
+# Ignore backup and temporary files
+*~
+*.bak
+
+# Ignore database files
+*.sqlite3
+
+# Ignore environment-specific settings
+.env
+
+# Ignore generated documentation
+#/doc/
+#/docs/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore package managers
+node_modules/
+npm-debug.log
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore IDE-specific files
+/.vscode/
+*.code-workspace
+
+# Ignore macOS Finder files
+.AppleDouble
+.AppleDesktop
+.DS_Store
+
+# Ignore build directories for various tools
+#/dist/
+/target/
+/.idea/
+
+# Ignore user-specific settings
+/.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore operating system files
+/.DS_Store
+
+# Ignore editor/IDE files
+*.suo
+*.user
+*.sln.docstates
+
+# Ignore Visual Studio Code settings
+.vscode/
+
+# Ignore spec files
+*.spec
+
+# Ignore egg-info files
+*.egg-info/
