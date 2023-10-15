@@ -1,9 +1,9 @@
 import pybamm as pb
 
-from sox.battery.parameters import Inputs, Outputs
+from sox.battery.ecm.parameters import Inputs, Outputs
 
 
-class TheveninModel:
+class Thevenin:
     def __init__(self, parameters: Inputs):
         self.parameters = parameters
         self.model = self.build_default_model()

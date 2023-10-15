@@ -1,8 +1,9 @@
 import os
 
 import pybamm as pb
+from scipy.interpolate import interp1d
 
-from sox.battery.parameters import Inputs
+from sox.battery.ecm.parameters import Inputs
 
 path = os.path.join(os.path.dirname(__file__), "")
 
@@ -38,14 +39,14 @@ def entropic_change(ocv, temperature):
     return pb.Interpolant(x, y, [ocv, temperature], name)
 
 
-inputs = Inputs(
+default_inputs = Inputs(
     # electrical properties
     rc_pairs=1,
     initial_rc_voltage=[0.0],
     voltage_high_cut=4.5,
     voltage_low_cut=2.5,
     capacity=10,
-    initial_soc=0.5,
+    initial_soc=0.8,
     open_circuit_voltage=open_circuit_voltage,
     entropic_change=entropic_change,
     series_resistance=r0,
