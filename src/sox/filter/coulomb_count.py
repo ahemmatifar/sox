@@ -7,7 +7,6 @@ class CoulombCount:
 
     def update(self, current):
         self.soc -= current * self.sampling_time / (self.capacity * 3600)
-        return self.soc
 
 
 class CoulombCountVariableCapacity:
@@ -22,4 +21,3 @@ class CoulombCountVariableCapacity:
 
     def update(self, current, capacity):
         self.soc -= current * self.sampling_time / (capacity * 3600)
-        return self.soc
