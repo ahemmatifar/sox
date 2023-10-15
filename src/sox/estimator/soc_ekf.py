@@ -2,6 +2,7 @@ from typing import Callable
 
 import numpy as np
 from scipy.interpolate import interp1d
+
 from sox.battery.ecm.model import Thevenin
 from sox.filter.extended_kalman_filter import ExtendedKalmanFilter
 from sox.utils import derivative_interp1d
