@@ -1,7 +1,7 @@
+import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import interp1d
 from scipy.signal import savgol_filter
-import matplotlib.pyplot as plt
 
 
 def derivative_interp1d(x, y, deriv=1, window_length=5, polyorder=2, delta_x=None):
@@ -46,7 +46,7 @@ def quick_plot(data, sampling_time: float, legend=None, x_label=None, y_label=No
     # time = [sampling_time * i for i in range(n_time)]  # shared time axis for all subplots
 
     # Best set of colors
-    colors = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9']
+    colors = ["C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9"]
 
     num_plots = len(data)
     n_cols = 2  # number of columns
@@ -80,7 +80,7 @@ def quick_plot(data, sampling_time: float, legend=None, x_label=None, y_label=No
     # apply to all subplots
     for ax in fig.axes:
         ax.grid(False)
-        ax.legend(loc='best')  # Use a tight legend placement
+        ax.legend(loc="best")  # Use a tight legend placement
 
     plt.tight_layout()
     plt.show()
