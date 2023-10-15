@@ -59,18 +59,3 @@ class Outputs:
     ambient_temperature: np.ndarray  # 'Ambient temperature [degC]'
     cell_temperature: np.ndarray  # 'Cell temperature [degC]'
     jig_temperature: np.ndarray  # 'Jig temperature [degC]'
-
-    # other properties (not used in the model)
-    # 'C-rate'
-    # 'Discharge capacity [A.h]'
-    # 'Throughput capacity [A.h]'
-    # 'Discharge energy [W.h]'
-    # 'Throughput energy [W.h]'
-    # 'Heat transfer from cell to jig [W]'
-    # 'Heat transfer from jig to ambient [W]'
-    # 'Entropic change [V/K]'
-    # 'Reversible heat generation [W]'
-    # 'Element-0 irreversible heat generation [W]'
-    # 'Element-1 irreversible heat generation [W]'
-    # 'Irreversible heat generation [W]'
-    # 'Total heat generation [W]'
