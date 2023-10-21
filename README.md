@@ -10,7 +10,7 @@ uniform, normal, Poisson and exponential. Sensor faults include offset, scaling,
 can be injected randomly, or at any time during the simulation.
 
 # Examples
-Example notebooks are available in the [examples](src/sox/examples/) directory.
+Example notebooks are available in the [examples](examples/) directory.
 
 # Installation
 1. clone the repository 
