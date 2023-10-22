@@ -157,6 +157,9 @@ class UnscentedKalmanFilter:
         fx_args : tuple, optional
             Additional arguments to pass to fx
         """
+        if not isinstance(fx_args, tuple):
+            fx_args = (fx_args,)
+
         # calculate sigma points for given mean and covariance
         sigmas = self.sigma_gen.points(self.x, self.P)  # shape (n, 2n+1)
         self.sigmas_f = np.hstack([fx(s[:, np.newaxis], *fx_args) for s in sigmas.T])
@@ -181,6 +184,8 @@ class UnscentedKalmanFilter:
         hx_args : tuple, optional
             Additional arguments to pass to hx
         """
+        if not isinstance(hx_args, tuple):
+            hx_args = (hx_args,)
         if R is None:
             R = self.R
 
