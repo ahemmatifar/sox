@@ -27,7 +27,7 @@ class Sensor:
             sensor_value = self.apply_noise(sensor_value)
             return sensor_value
         except StopIteration:
-            raise IndexError(f"Data streaming finished. No more data available from the sensor")
+            raise IndexError(f"Sensor '{self.name}' finished reading.")
 
     def reset(self):
         self.time_iterator = iter(self.time)

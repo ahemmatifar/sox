@@ -1,6 +1,6 @@
 import pybamm as pb
 
-from sox.battery.ecm.parameters import Inputs, Outputs
+from sox.battery.thevenin.parameters import Inputs, Outputs
 
 
 class Thevenin:
@@ -47,8 +47,7 @@ class Thevenin:
                     f"Element-{i} initial overpotential [V]": self.parameters.initial_rc_voltage[i - 1],
                     f"R{i} [Ohm]": self.parameters.rc_resistance[i - 1],
                     f"C{i} [F]": self.parameters.rc_capacitance[i - 1],
-                },
-                check_already_exists=False,
+                }
             )
         return params
 

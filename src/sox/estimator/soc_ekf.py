@@ -3,8 +3,6 @@ from typing import Callable
 import numpy as np
 from scipy.interpolate import interp1d
 
-from sox.battery.ecm.model import Thevenin
-from sox.filter.extended_kalman_filter import ExtendedKalmanFilter
 from sox.utils import derivative_interp1d
 
 
@@ -29,14 +27,14 @@ class SOCWithEKF:
         ocv = [ocv_func([s]).evaluate()[0, 0] for s in soc]  # evaluates pb.Interpolant
         return derivative_interp1d(soc, ocv, delta_x=delta_soc)
 
-    def measurement(self, x, r0, current):
-        """Returns voltage measurement (z=Hx)."""
+    def hx(self, x, r0, current):
+        """Returns voltage measurement (z=hx)."""
         soc = x[0, 0]
         v_rc = x[1:, 0]
         voltage = self.ocv(soc) - np.sum(v_rc) - r0 * current
         return np.array([[voltage]])
 
-    def measurement_jacobian(self, x):
+    def h_jacobian(self, x):
         """Returns Jacobian of voltage measurement (H)."""
         soc = x[0, 0]
         jac = [self.docv(soc), *([-1] * self.rc_pairs)]

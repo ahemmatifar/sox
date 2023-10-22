@@ -3,15 +3,15 @@ import os
 import pybamm as pb
 from scipy.interpolate import interp1d
 
-from sox.battery.ecm.parameters import Inputs
+from sox.battery.thevenin.parameters import Inputs
 
 path = os.path.join(os.path.dirname(__file__), "")
 
-ocv_data = pb.parameters.process_1D_data("ecm_example_ocv.csv", path=path)
-r0_data = pb.parameters.process_3D_data_csv("ecm_example_r0.csv", path=path)
-r1_data = pb.parameters.process_3D_data_csv("ecm_example_r1.csv", path=path)
-c1_data = pb.parameters.process_3D_data_csv("ecm_example_c1.csv", path=path)
-dOCVdT_data = pb.parameters.process_2D_data_csv("ecm_example_docvdt.csv", path=path)
+ocv_data = pb.parameters.process_1D_data("thevenin_ocv.csv", path=path)
+r0_data = pb.parameters.process_3D_data_csv("thevenin_r0.csv", path=path)
+r1_data = pb.parameters.process_3D_data_csv("thevenin_r1.csv", path=path)
+c1_data = pb.parameters.process_3D_data_csv("thevenin_c1.csv", path=path)
+dOCVdT_data = pb.parameters.process_2D_data_csv("thevenin_docvdt.csv", path=path)
 
 
 def open_circuit_voltage(soc):
