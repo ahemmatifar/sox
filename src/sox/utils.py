@@ -5,7 +5,7 @@ from scipy.signal import savgol_filter
 
 
 def derivative_interp1d(x, y, deriv=1, window_length=5, polyorder=2, delta_x=None):
-    """"""
+    """Calculate the derivative of a function using Savitzky-Golay filter and interpolation."""
     if delta_x is None:
         assert np.unique(np.gradient(x)).size == 1, "x must be evenly spaced"
         delta_x = x[1] - x[0]
@@ -71,8 +71,8 @@ def quick_plot(time, data: list, legend=None, x_label=None, y_label=None, title=
         else:
             ax.plot(time, data[idx], color=colors[idx], label=legend[idx])
 
-    for ax in fig.axes:
         ax.grid(False)
         ax.legend(loc="best")
+
     plt.tight_layout()
     plt.show()

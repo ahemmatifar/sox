@@ -60,6 +60,10 @@ class ExtendedKalmanFilter:
         hj_args : tuple, optional
             Additional arguments to pass to h_jacobian
         """
+        if not isinstance(hx_args, tuple):
+            hx_args = (hx_args,)
+        if not isinstance(hj_args, tuple):
+            hj_args = (hj_args,)
         if R is None:
             R = self.R
 
