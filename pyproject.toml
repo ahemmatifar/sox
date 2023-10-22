@@ -8,7 +8,6 @@ description = "Playground for exploring battery state estimation methods."
 readme = "README.md"
 dependencies = [
     "pybamm",
-    "filterpy",
     "jupyter",
     "plotly",
 ]
