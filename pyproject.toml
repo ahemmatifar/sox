@@ -20,7 +20,12 @@ dev = [
     "pre-commit",
     "pytest",
     "pytest-cov",
+]
+doc = [
     "sphinx",
+    "myst-parser",
+    "furo",
+    "nbsphinx",
 ]
 
 [tool.black]
