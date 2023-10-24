@@ -24,6 +24,8 @@ dev = [
 doc = [
     "sphinx",
     "myst-parser",
+    "furo",
+    "nbsphinx",
 ]
 
 [tool.black]
