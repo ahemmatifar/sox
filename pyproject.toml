@@ -20,6 +20,7 @@ dev = [
     "pre-commit",
     "pytest",
     "pytest-cov",
+    "sphinx",
 ]
 
 [tool.black]
