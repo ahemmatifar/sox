@@ -55,7 +55,7 @@ class IsothermalThevenin:
         """State transition function"""
         soc = x[0, 0]
         v_rc = x[1:, 0]
-        soc_new = soc - current / (self.capacity * 3600.0)
+        soc_new = soc - current / (self.capacity * 3600.0) * dt
         v_rc_new = [
             v * np.exp(-dt / (r * c)) + current * r * (1 - np.exp(-dt / (r * c)))
             for v, r, c in zip(v_rc, self.rc_resistances, self.rc_capacitors)
