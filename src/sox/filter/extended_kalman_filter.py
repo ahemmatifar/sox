@@ -1,5 +1,7 @@
 import numpy as np
 
+from sox.utils import handle_matrix, handle_vector
+
 
 class ExtendedKalmanFilter:
     """Extended Kalman Filter
@@ -23,12 +25,15 @@ class ExtendedKalmanFilter:
     """
 
     def __init__(self, F, B, Q, R, x0, P0):
-        self.F = F  # State transition matrix
-        self.B = B  # Control input matrix
-        self.Q = Q  # Process noise covariance
-        self.R = R  # Measurement noise covariance
-        self.x = x0  # Initial state estimate
-        self.P = P0  # Initial error covariance
+        self.F = handle_matrix(F)  # State transition matrix
+        self.B = handle_matrix(B)  # Control input matrix
+        self.Q = handle_matrix(Q)  # Process noise covariance
+        self.R = handle_matrix(R)  # Measurement noise covariance
+        self.x = handle_vector(x0)  # Initial state estimate
+        self.P = handle_matrix(P0)  # Initial error covariance
+        self.x0 = handle_vector(x0)  # Initial state estimate
+        self.P0 = handle_matrix(P0)  # Initial error covariance
+
         self.I = np.eye(F.shape[0])  # Identity matrix
 
     def predict(self, u):
@@ -39,6 +44,8 @@ class ExtendedKalmanFilter:
         u : array_like
             Control input, shape (m, 1)
         """
+        u = handle_vector(u)
+
         self.x = self.F @ self.x + self.B @ u
         self.P = self.F @ self.P @ self.F.T + self.Q
 
@@ -60,6 +67,8 @@ class ExtendedKalmanFilter:
         hj_args : tuple, optional
             Additional arguments to pass to h_jacobian
         """
+        z = handle_vector(z)
+
         if not isinstance(hx_args, tuple):
             hx_args = (hx_args,)
         if not isinstance(hj_args, tuple):
@@ -72,9 +81,9 @@ class ExtendedKalmanFilter:
         S = H @ self.P @ H.T + R
         K = self.P @ H.T @ np.linalg.inv(S)
         self.x = self.x + K @ y
+        self.P = (self.I - K @ H) @ self.P
 
-        # P = (I-KH)P(I-KH)' + KRK' is more numerically stable
-        # P = (I-KH)P usually seen in the literature.
-        # self.P = (1 - K @ H) @ self.P
-        I_KH = self.I - K @ H
-        self.P = I_KH @ self.P @ I_KH.T + K @ R @ K.T
+    def reset(self):
+        """Reset state estimate"""
+        self.x = self.x0
+        self.P = self.P0

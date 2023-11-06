@@ -20,6 +20,7 @@ colors = [
     "#17becf",
 ]
 
+
 def derivative_interp1d(x, y, deriv=1, window_length=5, polyorder=2, delta_x=None):
     """Calculates the derivative of a function using Savitzky-Golay filter and interpolation."""
     if delta_x is None:
@@ -75,7 +76,9 @@ def quick_plot(time, data: list, legends=None, x_labels=None, y_labels=None, tit
                 )
         else:
             fig.add_trace(
-                go.Scatter(x=time, y=data[plot_idx], mode="lines", name=legends[plot_idx], line=dict(color=colors[plot_idx])),
+                go.Scatter(
+                    x=time, y=data[plot_idx], mode="lines", name=legends[plot_idx], line=dict(color=colors[plot_idx])
+                ),
                 row=row,
                 col=col,
             )
