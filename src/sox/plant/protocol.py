@@ -1,14 +1,21 @@
 from typing import Literal
 
-import pybamm as pb
+import pybamm
 
 
-def append_steps(*experiments: pb.Experiment) -> list:
+class Experiment(pybamm.Experiment):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+def append_steps(*experiments: Experiment) -> list:
+    """Appends the steps of multiple experiments into a single list of steps"""
     return [exp.args[0][0] for exp in experiments]
 
 
-def append_experiments(*experiments: pb.Experiment) -> pb.Experiment:
-    return pb.Experiment(append_steps(*experiments), *experiments[0].args)
+def append_experiments(*experiments: Experiment) -> Experiment:
+    """Appends multiple experiments into a single experiment"""
+    return Experiment(append_steps(*experiments), *experiments[0].args)
 
 
 def cc_charge_cv_rest(
@@ -17,8 +24,9 @@ def cc_charge_cv_rest(
     cv_hold_c_rate_limit: float = 0.05,
     rest_time_h: float = 0.5,
     sampling_time_s: float = 1,
-) -> pb.Experiment:
-    return pb.Experiment(
+) -> Experiment:
+    """Constant current charge, constant voltage hold, rest cycling protocol"""
+    return Experiment(
         [
             (
                 f"Charge at {c_rate} C until {max_voltage} V",
@@ -35,8 +43,9 @@ def cc_discharge_rest(
     min_voltage: float = 3.3,
     rest_time_h: float = 0.5,
     sampling_time_s: float = 1,
-) -> pb.Experiment:
-    return pb.Experiment(
+) -> Experiment:
+    """Constant current discharge, rest cycling protocol"""
+    return Experiment(
         [
             (
                 f"Discharge at {c_rate} C until {min_voltage} V",
@@ -58,13 +67,14 @@ def charge_discharge_cycling(
     direction: Literal["charge", "discharge"] = "discharge",
     number_of_cycles: int = 1,
     sampling_time_s: float = 1,
-) -> pb.Experiment:
+) -> Experiment:
+    """Charge and discharge cycling protocol"""
     charge = cc_charge_cv_rest(chg_c_rate, max_chg_voltage, chg_cv_hold_c_rate_limit, chg_rest_time_h, sampling_time_s)
     discharge = cc_discharge_rest(dchg_c_rate, min_dchg_voltage, dchg_rest_time_h, sampling_time_s)
     if direction == "charge":
-        return pb.Experiment(append_steps(charge, discharge) * number_of_cycles, period=f"{sampling_time_s} seconds")
+        return Experiment(append_steps(charge, discharge) * number_of_cycles, period=f"{sampling_time_s} seconds")
     elif direction == "discharge":
-        return pb.Experiment(append_steps(discharge, charge) * number_of_cycles, period=f"{sampling_time_s} seconds")
+        return Experiment(append_steps(discharge, charge) * number_of_cycles, period=f"{sampling_time_s} seconds")
     else:
         raise ValueError("direction must be 'charge' or 'discharge'")
 
@@ -75,8 +85,8 @@ def single_pulse(
     pulse_time_sec: float = 60,
     pulse_rest_time_sec: float = 600,
     sampling_time_s: float = 1,
-) -> pb.Experiment:
-    return pb.Experiment(
+) -> Experiment:
+    return Experiment(
         [
             (
                 f"{direction.capitalize()} at {c_rate} C for {pulse_time_sec} seconds",
@@ -94,9 +104,9 @@ def single_pulse_train(
     pulse_rest_time_sec: float = 600,
     number_of_pulses: int = 20,
     sampling_time_s: float = 1,
-) -> pb.Experiment:
+) -> Experiment:
     pulse_steps = single_pulse(direction, c_rate, pulse_time_sec, pulse_rest_time_sec, sampling_time_s).args[0]
-    return pb.Experiment(pulse_steps * number_of_pulses, period=f"{sampling_time_s} seconds")
+    return Experiment(pulse_steps * number_of_pulses, period=f"{sampling_time_s} seconds")
 
 
 def multi_pulse_train(
@@ -106,7 +116,7 @@ def multi_pulse_train(
     pulse_rest_time_sec=None,
     number_of_pulses=None,
     sampling_time_s: float = 1,
-) -> pb.Experiment:
+) -> Experiment:
     pulse_steps = append_steps(
         *[
             single_pulse(
@@ -119,7 +129,7 @@ def multi_pulse_train(
             for i in range(len(direction))
         ]
     )
-    return pb.Experiment(pulse_steps * number_of_pulses, period=f"{sampling_time_s} seconds")
+    return Experiment(pulse_steps * number_of_pulses, period=f"{sampling_time_s} seconds")
 
 
 def dst_schedule(
@@ -129,7 +139,7 @@ def dst_schedule(
 ):
     """DST schedule from https://avt.inl.gov/sites/default/files/pdf/battery/usabc_manual_rev2.pdf"""
     table = [
-        (16, 0),
+        (16, 0),  # (time in sec, power_level in % of peak_power)
         (28, -12.5),
         (12, -25),
         (8, 12.5),
@@ -159,7 +169,7 @@ def dst_schedule(
         else:
             steps.append(f"Rest for {time} seconds")
 
-    return pb.Experiment(
+    return Experiment(
         steps * number_of_cycles,
         period=f"{sampling_time_s} seconds",
     )

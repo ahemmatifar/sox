@@ -3,7 +3,7 @@ import os
 import pybamm as pb
 from scipy.interpolate import interp1d
 
-from sox.battery.thevenin.parameters import Inputs
+from sox.plant.thevenin.parameters import Inputs
 
 path = os.path.dirname(__file__)
 

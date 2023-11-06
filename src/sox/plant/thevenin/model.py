@@ -1,6 +1,6 @@
 import pybamm as pb
 
-from sox.battery.thevenin.parameters import Inputs, Outputs
+from sox.plant.thevenin.parameters import Inputs, Outputs
 
 
 class Thevenin:
