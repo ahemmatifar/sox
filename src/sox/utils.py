@@ -1,11 +1,27 @@
-import matplotlib.pyplot as plt
 import numpy as np
+import plotly.graph_objects as go
+import plotly.io as pio
+from plotly.subplots import make_subplots
 from scipy.interpolate import interp1d
 from scipy.signal import savgol_filter
 
+pio.templates.default = "simple_white"
+
+colors = [
+    "#1f77b4",
+    "#ff7f0e",
+    "#2ca02c",
+    "#d62728",
+    "#9467bd",
+    "#8c564b",
+    "#e377c2",
+    "#7f7f7f",
+    "#bcbd22",
+    "#17becf",
+]
 
 def derivative_interp1d(x, y, deriv=1, window_length=5, polyorder=2, delta_x=None):
-    """Calculate the derivative of a function using Savitzky-Golay filter and interpolation."""
+    """Calculates the derivative of a function using Savitzky-Golay filter and interpolation."""
     if delta_x is None:
         assert np.unique(np.gradient(x)).size == 1, "x must be evenly spaced"
         delta_x = x[1] - x[0]
@@ -15,64 +31,98 @@ def derivative_interp1d(x, y, deriv=1, window_length=5, polyorder=2, delta_x=Non
     return interp1d(x, dy, kind="linear", fill_value="extrapolate")
 
 
-def quick_plot(time, data: list, legend=None, x_label=None, y_label=None, title=None):
-    """Create subplots for multiple time series data with varying x-axes, preset solid lines, a selection of
-    colors, and customizable plot updating. Automatically determines the number of rows based on data length."""
+def quick_plot(time, data: list, legends=None, x_labels=None, y_labels=None, titles=None):
+    """Checks if the input parameters have the correct format and lengths."""
 
-    # Check if the input parameters have the correct format and lengths
-    if not data:
-        raise ValueError("The 'data' parameter is empty. Please provide time series data.")
+    # validate input parameters
+    if x_labels is not None:
+        if not isinstance(x_labels, str) and len(x_labels) != len(data):
+            raise ValueError("The 'x_labels' parameter should be a string or a list with the same length as 'data'.")
 
-    if x_label and (not isinstance(x_label, str) and len(x_label) != len(data)):
-        raise ValueError("The 'x_labels' parameter should be a string or a list with the same length as 'data'.")
+    if y_labels is not None:
+        if not isinstance(y_labels, str) and len(y_labels) != len(data):
+            raise ValueError("The length of 'y_labels' should match the number of subplots.")
 
-    if legend and len(legend) != len(data):
+    if legends and len(legends) != len(data):
         raise ValueError("The length of 'legend_labels' should match the number of data series.")
 
-    if title and len(title) != len(data):
+    if titles and len(titles) != len(data):
         raise ValueError("The length of 'titles' should match the number of subplots.")
 
-    if y_label and (not isinstance(y_label, str) and len(y_label) != len(data)):
-        raise ValueError("The length of 'y_labels' should match the number of subplots.")
-
-    if legend is None:
-        legend = ["Series 1"] * len(data)
+    # create default labels if not provided
+    if legends is None:
+        legends = ["Series 1"] * len(data)
         for j, series in enumerate(data):
             if isinstance(series, list):
-                legend[j] = [f"Series {k + 1}" for k in range(len(series))]
-
-    colors = ["C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9"]
+                legends[j] = [f"Series {k + 1}" for k in range(len(series))]
 
     num_plots = len(data)
-    n_cols = 2  # number of columns
+    n_cols = 2
     n_rows = (num_plots + n_cols - 1) // n_cols
 
-    fig, axes = plt.subplots(n_rows, n_cols, figsize=(10, 3 * n_rows))
+    fig = make_subplots(rows=n_rows, cols=n_cols, subplot_titles=titles)
 
-    for idx in range(num_plots):
-        ax = axes[idx // n_cols][idx % n_cols]
+    for plot_idx in range(num_plots):
+        row = plot_idx // n_cols + 1
+        col = plot_idx % n_cols + 1
 
-        if title and idx < len(title):
-            ax.set_title(title[idx])
-
-        if isinstance(x_label, str):
-            ax.set_xlabel(x_label)  # single x-axis label for all subplots
-        elif x_label and idx < len(x_label):
-            ax.set_xlabel(x_label[idx])
-
-        if isinstance(y_label, str):
-            ax.set_ylabel(y_label)
-        elif y_label and idx < len(y_label):
-            ax.set_ylabel(y_label[idx])
-
-        if isinstance(data[idx], list):
-            for k, series in enumerate(data[idx]):
-                ax.plot(time, series, color=colors[k], label=legend[idx][k])
+        if isinstance(data[plot_idx], list):
+            for k, series in enumerate(data[plot_idx]):
+                fig.add_trace(
+                    go.Scatter(x=time, y=series, mode="lines", name=legends[plot_idx][k], line=dict(color=colors[k])),
+                    row=row,
+                    col=col,
+                )
         else:
-            ax.plot(time, data[idx], color=colors[idx], label=legend[idx])
+            fig.add_trace(
+                go.Scatter(x=time, y=data[plot_idx], mode="lines", name=legends[plot_idx], line=dict(color=colors[plot_idx])),
+                row=row,
+                col=col,
+            )
 
-        ax.grid(False)
-        ax.legend(loc="best")
+        x_label_text = None
+        if isinstance(x_labels, list):
+            x_label_text = x_labels[plot_idx]
+        elif isinstance(x_labels, str):
+            x_label_text = x_labels
 
-    plt.tight_layout()
-    plt.show()
+        y_label_text = None
+        if isinstance(y_labels, list):
+            y_label_text = y_labels[plot_idx]
+        elif isinstance(y_labels, str):
+            y_label_text = y_labels
+
+        if x_label_text:
+            fig.update_xaxes(title_text=x_label_text, showgrid=False, row=row, col=col)
+
+        if y_label_text:
+            fig.update_yaxes(title_text=y_label_text, showgrid=False, row=row, col=col)
+
+    fig.update_layout(
+        showlegend=True,
+        width=1000,
+        height=350 * n_rows,
+    )
+    fig.show()
+
+
+def handle_vector(x):
+    """Convert a scalar or 1D array or a 2D row vector to 2D column vector."""
+    if np.isscalar(x):  # e.g. x = 1
+        return np.atleast_2d(x)
+    elif x.ndim == 1:  # e.g. x = np.array([1, 2, 3])
+        return np.atleast_2d(x).T
+    elif x.ndim == 2 and x.shape[0] == 1:  # e.g. x = np.array([[1, 2, 3]])
+        return x.T
+    else:
+        return x
+
+
+def handle_matrix(x):
+    """Convert a scalar or a row vector to diagonal matrix."""
+    if np.isscalar(x):  # e.g. x = 1
+        return np.atleast_2d(x)
+    elif x.ndim == 1:  # e.g. x = np.array([1, 2, 3])
+        return np.diag(x)
+    else:
+        return x
