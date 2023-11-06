@@ -12,8 +12,9 @@ dev_install:
 test:
 	pytest
 
-.PHONY: lint
-lint:
+.PHONY: format
+format:
 	black .
-	ruff --fix .
+	ruff format .
+	ruff check --fix .
 	mypy --ignore-missing-imports .

@@ -1,6 +1,8 @@
 import numpy as np
 from scipy.linalg import cholesky
 
+from sox.utils import handle_matrix, handle_vector
+
 
 class MerweSigmaPoints:
     """Sigma points for Unscented Kalman Filter
@@ -134,14 +136,16 @@ class UnscentedKalmanFilter:
     """
 
     def __init__(self, Q, R, x0, P0, sigma_gen):
-        self.Q = Q  # Process noise covariance, shape (n, n)
-        self.R = R  # Measurement noise covariance, shape (k, k)
-        self.x = x0  # Initial state estimate, shape (n, 1)
-        self.P = P0  # Initial error covariance, shape (n, n)
-        self.sigma_gen = sigma_gen  # Sigma point generator
+        self.Q = handle_matrix(Q)  # Process noise covariance, shape (n, n)
+        self.R = handle_matrix(R)  # Measurement noise covariance, shape (k, k)
+        self.x = handle_vector(x0)  # Initial state estimate, shape (n, 1)
+        self.P = handle_matrix(P0)  # Initial error covariance, shape (n, n)
+        self.x0 = handle_vector(x0)
+        self.P0 = handle_matrix(P0)
 
-        self.nx = x0.shape[0]
-        self.nz = R.shape[0]
+        self.sigma_gen = sigma_gen  # Sigma point generator
+        self.nx = self.x0.shape[0]
+        self.nz = self.R.shape[0]
         self.sigmas_f = np.zeros((self.nx, 2 * self.nx + 1))  # predicted sigma points
         self.sigmas_h = np.zeros((self.nz, 2 * self.nx + 1))  # measurement sigma points
         self.wm = sigma_gen.wm  # weights for means, shape (2n+1,)
@@ -184,6 +188,8 @@ class UnscentedKalmanFilter:
         hx_args : tuple, optional
             Additional arguments to pass to hx
         """
+        z = handle_vector(z)
+
         if not isinstance(hx_args, tuple):
             hx_args = (hx_args,)
         if R is None:
@@ -207,3 +213,12 @@ class UnscentedKalmanFilter:
         # update Gaussian state estimate (x, P)
         self.x = self.x + K @ y
         self.P = self.P - K @ S @ K.T
+
+    def reset(self):
+        """Reset the filter to its initial state"""
+        self.x = self.x0
+        self.P = self.P0
+        self.sigmas_f = self.sigma_gen.points(self.x, self.P)
+        self.sigmas_h = np.zeros((self.nz, 2 * self.nx + 1))
+        self.wm = self.sigma_gen.wm
+        self.wc = self.sigma_gen.wc
