@@ -11,22 +11,27 @@ can be injected randomly, or at any time during the simulation.
 State estimation methods currently supported include Coulomb counting (CC), Extended Kalman Filter (EKF), 
 and Unscented Kalman Filter (UKF).
 
-# Examples
-Example notebooks are available in [examples](tutorials) directory.
+Documentation and tutorials can be found at [SOX Documentation](https://sox.readthedocs.io/en/latest/).
 
-# Installation
+### Installation
 1. clone the repository 
-    ```bash
-    git clone https://github.com/ahemmatifar/sox.git
-    ```
+   ```bash
+   git clone https://github.com/ahemmatifar/sox.git
+   ```
 2. Change to project directory and install the project
-    ```bash
-    cd sox
-    make dev_install
-    ```
+   ```bash
+   cd sox
+   make dev_install
+   ```
    or alternatively, without using `make`
-    ```bash
-    cd sox
-    python -m pip install --upgrade pip
-	pip install -e .[dev]
-    ```
+   ```bash
+   cd sox
+   python -m pip install --upgrade pip
+   pip install -e .[dev]
+   ```
+
+### Testing
+To run the tests, change to project directory and run `make test`
+
+### Documentation
+This project uses Sphinx for documentation. To build the documentation, change to docs directory (`cd docs`) and run `make html`.

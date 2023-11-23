@@ -20,6 +20,10 @@ venv/
 /dist/
 /build/
 
+# Ignore Sphinx build files
+docs/_build/
+docs/build/
+
 # Ignore compiled Python files
 *.pyo
 *.pyd
