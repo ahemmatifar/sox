@@ -14,16 +14,10 @@ and Unscented Kalman Filter (UKF).
 Documentation and tutorials can be found at [SOX Documentation](https://sox.readthedocs.io/en/latest/).
 
 ### Installation
-1. clone the repository 
-   ```bash
-   git clone https://github.com/ahemmatifar/sox.git
-   ```
-2. Change to project directory and install the project
-   ```bash
-   cd sox
-   make dev_install
-   ```
-   or alternatively, without using `make`
+1. clone this repository `git clone https://github.com/ahemmatifar/sox.git`
+2. Change to project directory (`cd sox`) and install the project `make dev_install`
+   
+   Alternatively, without using `make`, run
    ```bash
    cd sox
    python -m pip install --upgrade pip
@@ -34,4 +28,5 @@ Documentation and tutorials can be found at [SOX Documentation](https://sox.read
 To run the tests, change to project directory and run `make test`
 
 ### Documentation
-This project uses Sphinx for documentation. To build the documentation, change to docs directory (`cd docs`) and run `make html`.
+This project uses Sphinx for documentation. To build the documentation locally, change to docs directory (`cd docs`)
+and run `make html`.
