@@ -25,8 +25,6 @@ dev = [
     "pre-commit",  # for pre-commit hooks
     "pytest",  # for testing
     "pytest-cov",  # for test coverage
-]
-doc = [
     "sphinx",  # for generating html docs
     "myst-parser",  # for markdown support
     "furo",  # for sphinx theme
