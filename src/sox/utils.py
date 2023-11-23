@@ -1,11 +1,7 @@
+import matplotlib.pyplot as plt
 import numpy as np
-import plotly.graph_objects as go
-import plotly.io as pio
-from plotly.subplots import make_subplots
 from scipy.interpolate import interp1d
 from scipy.signal import savgol_filter
-
-pio.templates.default = "simple_white"
 
 colors = [
     "#1f77b4",
@@ -63,28 +59,18 @@ def quick_plot(time: list, data: list, legends=None, x_labels=None, y_labels=Non
     num_plots = len(data)
     n_rows = (num_plots + n_cols - 1) // n_cols
 
-    fig = make_subplots(rows=n_rows, cols=n_cols, subplot_titles=titles, horizontal_spacing=0.1)
+    fig, axs = plt.subplots(n_rows, n_cols, figsize=(12, 4 * n_rows), constrained_layout=True)
+    axs = axs.flatten()
 
     for plot_idx in range(num_plots):
-        row = plot_idx // n_cols + 1
-        col = plot_idx % n_cols + 1
         t = time[0] if len(time) == 1 else time[plot_idx]
 
         if isinstance(data[plot_idx], list):  # multiple series in one subplot
             for k, series in enumerate(data[plot_idx]):
-                fig.add_trace(
-                    go.Scatter(x=t, y=series, mode="lines", name=legends[plot_idx][k], line=dict(color=colors[k])),
-                    row=row,
-                    col=col,
-                )
+                axs[plot_idx].plot(t, series, label=legends[plot_idx][k])
+            axs[plot_idx].legend(loc="best")
         else:  # single series in one subplot
-            fig.add_trace(
-                go.Scatter(
-                    x=t, y=data[plot_idx], mode="lines", name=legends[plot_idx], line=dict(color=colors[plot_idx])
-                ),
-                row=row,
-                col=col,
-            )
+            axs[plot_idx].plot(t, data[plot_idx], label=legends[plot_idx])
 
         x_label_text = None
         if isinstance(x_labels, list):
@@ -99,17 +85,14 @@ def quick_plot(time: list, data: list, legends=None, x_labels=None, y_labels=Non
             y_label_text = y_labels
 
         if x_label_text:
-            fig.update_xaxes(title_text=x_label_text, row=row, col=col)
+            axs[plot_idx].set_xlabel(x_label_text)
 
         if y_label_text:
-            fig.update_yaxes(title_text=y_label_text, row=row, col=col)
+            axs[plot_idx].set_ylabel(y_label_text)
 
-    fig.update_layout(
-        showlegend=True,
-        width=1000,
-        height=350 * n_rows,
-    )
-    fig.show()
+        axs[plot_idx].set_title(titles[plot_idx])
+
+    plt.show()
 
 
 def handle_vector(x):
