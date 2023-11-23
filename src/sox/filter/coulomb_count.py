@@ -5,7 +5,7 @@ class CoulombCount:
         self.sampling_time = sampling_time  # s
         self.soc = initial_soc
 
-    def update(self, current: float):
+    def predict(self, current: float):
         self.soc -= current * self.sampling_time / (self.capacity * 3600)
 
     def reset(self):
@@ -22,7 +22,7 @@ class CoulombCountVariableCapacity:
         self.sampling_time = sampling_time  # s
         self.soc = initial_soc
 
-    def update(self, current: float, capacity: float):
+    def predict(self, current: float, capacity: float):
         self.soc -= current * self.sampling_time / (capacity * 3600)
 
     def reset(self):
