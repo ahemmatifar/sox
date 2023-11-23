@@ -1,13 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
-# import plotly.graph_objects as go
-# import plotly.io as pio
-# from plotly.subplots import make_subplots
 from scipy.interpolate import interp1d
 from scipy.signal import savgol_filter
-
-# pio.templates.default = "simple_white"
 
 colors = [
     "#1f77b4",
