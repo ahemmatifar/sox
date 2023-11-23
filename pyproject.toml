@@ -10,6 +10,7 @@ dependencies = [
     "pybamm",
     "jupyter",
     "plotly",
+    "ipywidgets",
 ]
 
 [project.optional-dependencies]

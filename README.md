@@ -12,7 +12,7 @@ State estimation methods currently supported include Coulomb counting (CC), Exte
 and Unscented Kalman Filter (UKF).
 
 # Examples
-Example notebooks are available in [examples](examples) directory.
+Example notebooks are available in [examples](tutorials) directory.
 
 # Installation
 1. clone the repository 
