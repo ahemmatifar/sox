@@ -7,26 +7,26 @@ authors = [
 description = "Playground for exploring battery state estimation methods."
 readme = "README.md"
 dependencies = [
-    "pybamm",
-    "jupyter",
-    "plotly",
-    "ipywidgets",
+    "pybamm",  # for battery models
+    "jupyter",  # for notebooks
+    "plotly",  # for plotting
+    "ipywidgets",  # for interactive plots
 ]
 
 [project.optional-dependencies]
 dev = [
-    "black[jupyter]",
-    "ruff",
-    "mypy",
-    "pre-commit",
-    "pytest",
-    "pytest-cov",
+    "black[jupyter]",  # for formatting
+    "ruff",  # for linting
+    "mypy",  # for type checking
+    "pre-commit",  # for pre-commit hooks
+    "pytest",  # for testing
+    "pytest-cov",  # for test coverage
 ]
 doc = [
-    "sphinx",
-    "myst-parser",
-    "furo",
-    "nbsphinx",
+    "sphinx",  # for generating html docs
+    "myst-parser",  # for markdown support
+    "furo",  # for sphinx theme
+    "nbsphinx",  # for converting notebooks to html
 ]
 
 [tool.black]

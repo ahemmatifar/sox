@@ -1,17 +1,20 @@
-% SOX documentation master file, created by
-% sphinx-quickstart on Mon Oct 23 20:29:02 2023.
-% You can adapt this file completely to your liking, but it should at least
-% contain the root `toctree` directive.
+# SOX documentation
 
-# Welcome to SOX's documentation!
+---
+
+SOX is a playground for exploring battery state estimation methods written in Python. SOX provides a simple 
+interface for running battery state of charge estimation methods with 
+simulated cycling data and sensor noise and fault injection. This project consists of 
+
+1. Battery plant model based on the Thevenin equivalent circuit.
+2. Sensor noise models such as uniform, normal, Poisson and exponential. 
+3. Sensor fault models such as offset, scaling, drift, and stuck-at. These faults can be injected randomly, or at any time during the simulation.
+4. State estimation algorithms such as Coulomb counting (CC), Extended Kalman Filter (EKF), 
+and Unscented Kalman Filter (UKF).
 
 ```{toctree}
 :caption: 'Contents:'
-:maxdepth: 2
+:maxdepth: 1
+
+tutorials/tutorial 1 - battery cycling
 ```
-
-# Indices and tables
-
-- {ref}`genindex`
-- {ref}`modindex`
-- {ref}`search`
