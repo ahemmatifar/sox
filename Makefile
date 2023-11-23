@@ -7,7 +7,6 @@ install:
 dev_install:
 	python -m pip install --upgrade pip
 	pip install -e .[dev]
-	pip install -e .[doc]
 
 .PHONY: test
 test:
