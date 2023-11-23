@@ -8,12 +8,11 @@ author = "Ali Hemmatifar"
 # General configuration
 
 extensions = [
-    "sphinx.ext.duration",
-    "sphinx.ext.autosectionlabel",
-    "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
-    # "myst_parser",
-    "myst_nb",
+    "sphinx.ext.duration",  # for timing the build
+    "sphinx.ext.autosectionlabel",  # for referencing sections
+    "sphinx.ext.autodoc",  # for automatically generating docs from docstrings
+    "sphinx.ext.autosummary",  # for automatically generating docs from docstrings
+    "myst_nb",  # this replaces myst_parser and allows us to use jupyter notebooks
 ]
 
 templates_path = ["_templates"]
@@ -26,6 +25,6 @@ html_theme = "furo"
 html_static_path = ["_static"]
 
 
-# Options for correct display of Plotly in myst_nb
+# Options for myst-nb
 
-html_js_files = ["https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"]
+nb_execution_mode = "off"  # disables notebook execution on build

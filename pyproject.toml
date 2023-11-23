@@ -26,9 +26,8 @@ dev = [
     "pytest",  # for testing
     "pytest-cov",  # for test coverage
     "sphinx",  # for generating html docs
-    "myst-parser",  # for markdown support
     "furo",  # for sphinx theme
-    "nbsphinx",  # for converting notebooks to html
+    "myst-nb",  # for jupyter notebooks in sphinx
 ]
 
 [tool.black]

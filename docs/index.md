@@ -1,7 +1,5 @@
 # SOX documentation
 
----
-
 SOX is a playground for exploring battery state estimation methods written in Python. SOX provides a simple 
 interface for running battery state of charge estimation methods with 
 simulated cycling data and sensor noise and fault injection. This project consists of 
@@ -13,8 +11,9 @@ simulated cycling data and sensor noise and fault injection. This project consis
 and Unscented Kalman Filter (UKF).
 
 ```{toctree}
+:numbered:
 :caption: 'Contents:'
 :maxdepth: 1
 
-tutorials/tutorial 1 - battery cycling
+tutorials/01 - battery cycling
 ```
