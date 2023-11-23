@@ -2,8 +2,10 @@ import numpy as np
 
 
 class Fault:
-    def __init__(self, activation_probability=None, random_seed=None, start_time=None, stop_time=None):
-        self.activation_probability = activation_probability
+    def __init__(self, fault_probability=None, random_seed=None, start_time=None, stop_time=None):
+        self.validate_inputs(fault_probability, start_time, stop_time)
+
+        self.fault_probability = fault_probability
         self.start_time = start_time
         self.stop_time = stop_time
 
@@ -11,14 +13,34 @@ class Fault:
             np.random.seed(random_seed)
 
     def is_active(self, time):
-        if self.activation_probability is not None:
-            return np.random.random() < self.activation_probability
+        if self.fault_probability is not None:
+            return np.random.random() < self.fault_probability
         if (self.start_time is not None) and (self.stop_time is not None):
             return self.start_time <= time <= self.stop_time
         return False
 
     def apply(self, *args, **kwargs):
         pass
+
+    @staticmethod
+    def validate_inputs(fault_probability, start_time, stop_time):
+        """Validate inputs for Fault class"""
+
+        # time-based and probability-based faults are mutually exclusive
+        if (fault_probability is None) and ((start_time is None) or (stop_time is None)):
+            raise ValueError("Time-based fault requires `start_time` and `stop_time` but not `fault_probability`")
+        if (fault_probability is not None) and ((start_time is not None) or (stop_time is not None)):
+            raise ValueError("Probability-based fault requires `fault_probability` but not `start_time` or `stop_time`")
+
+        # probability must be between 0 and 1
+        if fault_probability is not None:
+            if not (0 <= fault_probability <= 1):
+                raise ValueError("Fault probability must be between 0 and 1")
+
+        # start_time must be less than stop_time
+        if (start_time is not None) and (stop_time is not None):
+            if not (start_time < stop_time):
+                raise ValueError("Fault start_time must be less than stop_time")
 
 
 class Offset(Fault):
@@ -53,7 +75,8 @@ class Scaling(Fault):
 
 class Drift(Fault):
     """drift fault occurs when a sensor values change over time.
-    This is modeled by adding a linear drift to the sensor readings."""
+    This is modeled by adding a linear drift to the sensor readings.
+    The expected behavior for t > stop_time is to return the true value."""
 
     def __init__(self, rate, *args, **kwargs):
         super().__init__(*args, **kwargs)

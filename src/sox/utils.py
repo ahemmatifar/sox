@@ -32,10 +32,13 @@ def derivative_interp1d(x, y, deriv=1, window_length=5, polyorder=2, delta_x=Non
     return interp1d(x, dy, kind="linear", fill_value="extrapolate")
 
 
-def quick_plot(time, data: list, legends=None, x_labels=None, y_labels=None, titles=None):
-    """Checks if the input parameters have the correct format and lengths."""
+def quick_plot(time: list, data: list, legends=None, x_labels=None, y_labels=None, titles=None, n_cols=2):
+    """Quickly plot a list of data series with Plotly and return a Figure object"""
 
     # validate input parameters
+    if len(time) != 1 and len(time) != len(data):
+        raise ValueError("The length of 'time' should be 1 or match the number of subplots.")
+
     if x_labels is not None:
         if not isinstance(x_labels, str) and len(x_labels) != len(data):
             raise ValueError("The 'x_labels' parameter should be a string or a list with the same length as 'data'.")
@@ -58,26 +61,26 @@ def quick_plot(time, data: list, legends=None, x_labels=None, y_labels=None, tit
                 legends[j] = [f"Series {k + 1}" for k in range(len(series))]
 
     num_plots = len(data)
-    n_cols = 2
     n_rows = (num_plots + n_cols - 1) // n_cols
 
-    fig = make_subplots(rows=n_rows, cols=n_cols, subplot_titles=titles)
+    fig = make_subplots(rows=n_rows, cols=n_cols, subplot_titles=titles, horizontal_spacing=0.1)
 
     for plot_idx in range(num_plots):
         row = plot_idx // n_cols + 1
         col = plot_idx % n_cols + 1
+        t = time[0] if len(time) == 1 else time[plot_idx]
 
-        if isinstance(data[plot_idx], list):
+        if isinstance(data[plot_idx], list):  # multiple series in one subplot
             for k, series in enumerate(data[plot_idx]):
                 fig.add_trace(
-                    go.Scatter(x=time, y=series, mode="lines", name=legends[plot_idx][k], line=dict(color=colors[k])),
+                    go.Scatter(x=t, y=series, mode="lines", name=legends[plot_idx][k], line=dict(color=colors[k])),
                     row=row,
                     col=col,
                 )
-        else:
+        else:  # single series in one subplot
             fig.add_trace(
                 go.Scatter(
-                    x=time, y=data[plot_idx], mode="lines", name=legends[plot_idx], line=dict(color=colors[plot_idx])
+                    x=t, y=data[plot_idx], mode="lines", name=legends[plot_idx], line=dict(color=colors[plot_idx])
                 ),
                 row=row,
                 col=col,
@@ -96,10 +99,10 @@ def quick_plot(time, data: list, legends=None, x_labels=None, y_labels=None, tit
             y_label_text = y_labels
 
         if x_label_text:
-            fig.update_xaxes(title_text=x_label_text, showgrid=False, row=row, col=col)
+            fig.update_xaxes(title_text=x_label_text, row=row, col=col)
 
         if y_label_text:
-            fig.update_yaxes(title_text=y_label_text, showgrid=False, row=row, col=col)
+            fig.update_yaxes(title_text=y_label_text, row=row, col=col)
 
     fig.update_layout(
         showlegend=True,
