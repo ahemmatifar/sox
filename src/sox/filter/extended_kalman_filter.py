@@ -6,7 +6,7 @@ from sox.utils import handle_matrix, handle_vector
 class ExtendedKalmanFilter:
     """Extended Kalman Filter
 
-    Parameters and Attributes
+    Parameters
     ----------
     F : array_like
         State transition matrix
@@ -20,8 +20,15 @@ class ExtendedKalmanFilter:
         Initial state estimate
     P0 : array_like
         Initial error covariance
+
+    Attributes
+    ----------
     P : array_like
         Initial error covariance
+    x : array_like
+        Initial state estimate
+    I : array_like
+        Identity matrix
     """
 
     def __init__(self, F, B, Q, R, x0, P0):
