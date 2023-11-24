@@ -31,6 +31,11 @@ dev = [
     "myst-nb",  # for jupyter notebooks in sphinx
 ]
 
+[project.urls]
+Homepage = "https://github.com/ahemmatifar/sox"
+Issues = "https://github.com/ahemmatifar/sox/issues"
+Documentation = "https://sox.readthedocs.io/en/latest/index.html"
+
 [tool.black]
 line-length = 120
 
