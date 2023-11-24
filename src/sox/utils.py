@@ -59,7 +59,8 @@ def quick_plot(time: list, data: list, legends=None, x_labels=None, y_labels=Non
     num_plots = len(data)
     n_rows = (num_plots + n_cols - 1) // n_cols
 
-    fig, axs = plt.subplots(n_rows, n_cols, figsize=(12, 4 * n_rows), constrained_layout=True)
+    # fig, axs = plt.subplots(n_rows, n_cols, figsize=(12, 4 * n_rows), constrained_layout=True)
+    fig, axs = plt.subplots(n_rows, n_cols, figsize=(12, 4 * n_rows))
     axs = axs.flatten()
 
     for plot_idx in range(num_plots):
@@ -90,8 +91,13 @@ def quick_plot(time: list, data: list, legends=None, x_labels=None, y_labels=Non
         if y_label_text:
             axs[plot_idx].set_ylabel(y_label_text)
 
-        axs[plot_idx].set_title(titles[plot_idx])
+        if titles:
+            axs[plot_idx].set_title(titles[plot_idx])
 
+    for plot_idx in range(num_plots, n_rows * n_cols):  # removes unused subplots
+        fig.delaxes(axs[plot_idx])
+
+    plt.tight_layout()
     plt.show()
 
 
