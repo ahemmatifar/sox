@@ -12,21 +12,3 @@ State estimation methods currently supported include Coulomb counting (CC), Exte
 and Unscented Kalman Filter (UKF).
 
 Documentation and tutorials can be found at [SOX Documentation](https://sox.readthedocs.io/en/latest/).
-
-### Installation
-1. clone this repository `git clone https://github.com/ahemmatifar/sox.git`
-2. Change to project directory (`cd sox`) and install the project `make dev_install`
-   
-   Alternatively, without using `make`, run
-   ```bash
-   cd sox
-   python -m pip install --upgrade pip
-   pip install -e .[dev]
-   ```
-
-### Testing
-To run the tests, change to project directory and run `make test`
-
-### Documentation
-This project uses Sphinx for documentation. To build the documentation locally, change to docs directory (`cd docs`)
-and run `make html`.
