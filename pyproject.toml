@@ -14,6 +14,7 @@ dependencies = [
     "pybamm",  # for battery models
     "jupyter",  # for notebooks
     "plotly",  # for plotting
+    "matplotlib",  # for plotting
     "ipywidgets",  # for interactive plots
 ]
 
