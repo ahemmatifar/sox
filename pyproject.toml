@@ -25,6 +25,8 @@ dev = [
     "pre-commit",  # for pre-commit hooks
     "pytest",  # for testing
     "pytest-cov",  # for test coverage
+]
+docs = [
     "sphinx",  # for generating html docs
     "sphinx-autoapi",  # for generating api docs
     "furo",  # for sphinx theme
