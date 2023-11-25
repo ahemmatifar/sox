@@ -4,6 +4,8 @@ import pybamm
 
 
 class Experiment(pybamm.Experiment):
+    """utility for PyBaMM Experiment object"""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -86,6 +88,7 @@ def single_pulse(
     pulse_rest_time_sec: float = 600,
     sampling_time_s: float = 1,
 ) -> Experiment:
+    """Single pulse then rest protocol"""
     return Experiment(
         [
             (
