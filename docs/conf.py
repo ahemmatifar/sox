@@ -29,12 +29,13 @@ html_static_path = ["_static"]
 # Options for napoleon
 
 napoleon_numpy_docstring = True
-
+napoleon_google_docstring = False
 
 # Options for myst-nb
 
-nb_execution_mode = "off"  # disables notebook execution on build
-
+myst_enable_extensions = [
+    "dollarmath",  # for inline math
+]
 
 # Options for autoapi
 
