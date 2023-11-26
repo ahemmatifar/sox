@@ -11,7 +11,7 @@ authors = [
 description = "Playground for exploring battery state estimation methods."
 readme = "README.md"
 dependencies = [
-    "pybamm",  # for battery models
+    "pybamm[jax]",  # for battery models
     "jupyter",  # for notebooks
     "plotly",  # for plotting
     "matplotlib",  # for plotting
