@@ -14,7 +14,27 @@ Capacitance = Any
 
 @dataclass
 class Inputs:
-    """Input parameters for the battery model."""
+    """Input variables to the battery model.
+
+    Args:
+        rc_pairs (int): Number of RC pairs.
+        initial_rc_voltage (list): Element-i initial overpotential [V].
+        voltage_high_cut (float): Upper voltage cut-off [V].
+        voltage_low_cut (float): Lower voltage cut-off [V].
+        capacity (float): Cell capacity [A.h].
+        initial_soc (float): Initial SoC.
+        open_circuit_voltage (callable): Open-circuit voltage [V].
+        entropic_change (callable): Entropic change [V/K] (temp in degC).
+        series_resistance (callable): R0 [Ohm].
+        rc_resistance (list): [R1 [Ohm], R2 [Ohm], ..., Rn [Ohm]].
+        rc_capacitance (list): [C1 [F], C2 [F], ..., Cn [F]].
+        initial_temperature (float): Initial temperature [K].
+        ambient_temperature (float): Ambient temperature [K].
+        cth_cell (float): Cell thermal mass [J/K].
+        cth_jig (float): Jig thermal mass [J/K].
+        k_cell_jig (float): Cell-jig heat transfer coefficient [W/K].
+        k_jig_air (float): Jig-air heat transfer coefficient [W/K].
+    """
 
     # electrical properties
     rc_pairs: int
@@ -40,7 +60,24 @@ class Inputs:
 
 @dataclass
 class Outputs:
-    """Output variables from the battery model."""
+    """Output variables from the battery model.
+
+    Args:
+        time (array_like): Time [s].
+        voltage (array_like): Voltage [V].
+        rc_voltage (list): [Element-1 overpotential [V], ..., Element-n overpotential [V]].
+        ocv (array_like): Open-circuit voltage [V].
+        current (array_like): Current [A].
+        power (array_like): Power [W].
+        resistance (array_like): Resistance [Ohm].
+        series_resistance (array_like): R0 [Ohm].
+        rc_resistance (list): [R1 [Ohm], ..., Rn [Ohm]].
+        rc_capacitance (list): [C1 [F], ..., Cn [F]].
+        soc (array_like): SoC.
+        ambient_temperature (array_like): Ambient temperature [degC].
+        cell_temperature (array_like): Cell temperature [degC].
+        jig_temperature (array_like): Jig temperature [degC].
+    """
 
     # electrical properties
     time: np.ndarray  # 'Time [s]'

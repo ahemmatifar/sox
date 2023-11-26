@@ -4,6 +4,18 @@ from sox.plant.thevenin.parameters import Inputs, Outputs
 
 
 class Thevenin:
+    """Thevenin equivalent circuit model.
+
+    Args:
+        inputs (Inputs): Thevenin model inputs.
+
+    Attributes:
+        inputs (Inputs): Thevenin model inputs.
+        model (pybamm.equivalent_circuit.Thevenin): Thevenin model.
+        variable_names (list): List of variable names.
+        _inputs (dict): Dictionary of model parameters.
+    """
+
     def __init__(self, inputs: Inputs):
         self.inputs = inputs
         self.model = self.build_default_model()
@@ -11,7 +23,11 @@ class Thevenin:
         self._inputs = self.process_inputs()
 
     def build_default_model(self):
-        # builds a default PyBaMM model
+        """Builds the default Thevenin model with the given inputs.
+
+        Returns:
+            pybamm.equivalent_circuit.Thevenin: Thevenin model.
+        """
         return pb.equivalent_circuit.Thevenin(
             options={
                 "number of rc elements": self.inputs.rc_pairs,
@@ -20,7 +36,7 @@ class Thevenin:
         )
 
     def process_inputs(self):
-        # sets the parameters
+        """Processes the inputs to the model and returns a dictionary of parameters."""
         params = self.model.default_parameter_values
         params.update(
             {
@@ -52,7 +68,14 @@ class Thevenin:
         return params
 
     def solve(self, experiment: pb.Experiment):
-        # solves the model
+        """Solves the model for the given experiment.
+
+        Args:
+            experiment (pybamm.Experiment): Experiment to solve.
+
+        Returns:
+            Outputs: Thevenin model outputs.
+        """
         simulation = pb.Simulation(model=self.model, experiment=experiment, parameter_values=self._inputs)
         simulation.solve()
         solution = simulation.solution

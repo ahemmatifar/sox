@@ -4,7 +4,7 @@ import pybamm
 
 
 class Experiment(pybamm.Experiment):
-    """utility for PyBaMM Experiment object"""
+    """Utility for PyBaMM Experiment object"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -27,7 +27,18 @@ def cc_charge_cv_rest(
     rest_time_h: float = 0.5,
     sampling_time_s: float = 1,
 ) -> Experiment:
-    """Constant current charge, constant voltage hold, rest cycling protocol"""
+    """Constant current charge, constant voltage hold, rest cycling protocol
+
+    Args:
+        c_rate (float): Charge rate (C).
+        max_voltage (float): Maximum voltage (V).
+        cv_hold_c_rate_limit (float): C-rate limit for CV hold (C).
+        rest_time_h (float): Rest time (h).
+        sampling_time_s (float): Sampling time (s).
+
+    Returns:
+        Experiment: PyBaMM experiment object.
+    """
     return Experiment(
         [
             (
@@ -46,7 +57,14 @@ def cc_discharge_rest(
     rest_time_h: float = 0.5,
     sampling_time_s: float = 1,
 ) -> Experiment:
-    """Constant current discharge, rest cycling protocol"""
+    """Constant current discharge, rest cycling protocol
+
+    Args:
+        c_rate (float): Discharge rate (C).
+        min_voltage (float): Minimum voltage (V).
+        rest_time_h (float): Rest time (h).
+        sampling_time_s (float): Sampling time (s).
+    """
     return Experiment(
         [
             (
@@ -70,7 +88,20 @@ def charge_discharge_cycling(
     number_of_cycles: int = 1,
     sampling_time_s: float = 1,
 ) -> Experiment:
-    """Charge and discharge cycling protocol"""
+    """Charge and discharge cycling protocol
+
+    Args:
+        chg_c_rate (float): Charge rate (C).
+        max_chg_voltage (float): Maximum voltage (V).
+        chg_cv_hold_c_rate_limit (float): C-rate limit for CV hold (C).
+        chg_rest_time_h (float): Rest time (h).
+        dchg_c_rate (float): Discharge rate (C).
+        min_dchg_voltage (float): Minimum voltage (V).
+        dchg_rest_time_h (float): Rest time (h).
+        direction (str): Direction of cycling, either 'charge' or 'discharge'. Defaults to 'discharge'.
+        number_of_cycles (int): Number of cycles.
+        sampling_time_s (float): Sampling time (s).
+    """
     charge = cc_charge_cv_rest(chg_c_rate, max_chg_voltage, chg_cv_hold_c_rate_limit, chg_rest_time_h, sampling_time_s)
     discharge = cc_discharge_rest(dchg_c_rate, min_dchg_voltage, dchg_rest_time_h, sampling_time_s)
     if direction == "charge":
@@ -88,7 +119,15 @@ def single_pulse(
     pulse_rest_time_sec: float = 600,
     sampling_time_s: float = 1,
 ) -> Experiment:
-    """Single pulse then rest protocol"""
+    """Single pulse then rest protocol
+
+    Args:
+        direction (str): Direction of pulse, either 'charge' or 'discharge'. Defaults to 'discharge'.
+        c_rate (float): C-rate of pulse (C).
+        pulse_time_sec (float): Pulse time (s).
+        pulse_rest_time_sec (float): Rest time (s).
+        sampling_time_s (float): Sampling time (s).
+    """
     return Experiment(
         [
             (
@@ -108,6 +147,16 @@ def single_pulse_train(
     number_of_pulses: int = 20,
     sampling_time_s: float = 1,
 ) -> Experiment:
+    """Single pulse train protocol
+
+    Args:
+        direction (str): Direction of pulse, either 'charge' or 'discharge'. Defaults to 'discharge'.
+        c_rate (float): C-rate of pulse (C).
+        pulse_time_sec (float): Pulse time (s).
+        pulse_rest_time_sec (float): Rest time (s).
+        number_of_pulses (int): Number of pulses.
+        sampling_time_s (float): Sampling time (s).
+    """
     pulse_steps = single_pulse(direction, c_rate, pulse_time_sec, pulse_rest_time_sec, sampling_time_s).args[0]
     return Experiment(pulse_steps * number_of_pulses, period=f"{sampling_time_s} seconds")
 
@@ -117,9 +166,19 @@ def multi_pulse_train(
     c_rate=None,
     pulse_time_sec=None,
     pulse_rest_time_sec=None,
-    number_of_pulses=None,
+    number_of_pulses: int = 1,
     sampling_time_s: float = 1,
 ) -> Experiment:
+    """Multi pulse train protocol
+
+    Args:
+        direction (list): List of directions of pulses, either 'charge' or 'discharge'. Defaults to 'discharge'.
+        c_rate (list): List of C-rates of pulses (C).
+        pulse_time_sec (list): List of pulse times (s).
+        pulse_rest_time_sec (list): List of rest times (s).
+        number_of_pulses (int): Number of pulses.
+        sampling_time_s (float): Sampling time (s).
+    """
     pulse_steps = append_steps(
         *[
             single_pulse(
@@ -140,7 +199,17 @@ def dst_schedule(
     number_of_cycles: int = 1,
     sampling_time_s: float = 1,
 ):
-    """DST schedule from https://avt.inl.gov/sites/default/files/pdf/battery/usabc_manual_rev2.pdf"""
+    """Dynamically stress test schedule from USABC manual
+
+    Args:
+        peak_power (float): Peak power (W).
+        number_of_cycles (int): Number of cycles.
+        sampling_time_s (float): Sampling time (s).
+
+    References:
+        Electric Vehicle Battery Test Procedures Manual Revision 2.0
+        https://avt.inl.gov/sites/default/files/pdf/battery/usabc_manual_rev2.pdf
+    """
     table = [
         (16, 0),  # (time in sec, power_level in % of peak_power)
         (28, -12.5),

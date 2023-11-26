@@ -4,31 +4,26 @@ from sox.utils import handle_matrix, handle_vector
 
 
 class ExtendedKalmanFilter:
-    """Extended Kalman Filter
+    """Extended Kalman Filter (EKF)
 
-    Parameters
-    ----------
-    F : array_like
-        State transition matrix
-    B : array_like
-        Control input matrix
-    Q : array_like
-        Process noise covariance
-    R : array_like
-        Measurement noise covariance
-    x0 : array_like
-        Initial state estimate
-    P0 : array_like
-        Initial error covariance
+    Args:
+        F (array_like): State transition matrix, shape (n, n)
+        B (array_like): Control input matrix, shape (n, m)
+        Q (array_like): Process noise covariance, shape (n, n)
+        R (array_like): Measurement noise covariance, shape (k, k)
+        x0 (array_like): Initial state estimate, shape (n, 1)
+        P0 (array_like): Initial error covariance, shape (n, n)
 
-    Attributes
-    ----------
-    P : array_like
-        Initial error covariance
-    x : array_like
-        Initial state estimate
-    I : array_like
-        Identity matrix
+    Attributes:
+        F (array_like): State transition matrix, shape (n, n)
+        B (array_like): Control input matrix, shape (n, m)
+        Q (array_like): Process noise covariance, shape (n, n)
+        R (array_like): Measurement noise covariance, shape (k, k)
+        x (array_like): Current state estimate, shape (n, 1)
+        P (array_like): Current error covariance, shape (n, n)
+        x0 (array_like): Initial state estimate, shape (n, 1)
+        P0 (array_like): Initial error covariance, shape (n, n)
+        I (array_like): Identity matrix, shape (n, n)
     """
 
     def __init__(self, F, B, Q, R, x0, P0):
@@ -44,12 +39,10 @@ class ExtendedKalmanFilter:
         self.I = np.eye(F.shape[0])  # Identity matrix
 
     def predict(self, u):
-        """Predict next state
+        """Predicts the next state estimate based on control input u
 
-        Parameters
-        ----------
-        u : array_like
-            Control input, shape (m, 1)
+        Args:
+            u (array_like): Control input, shape (m, 1)
         """
         u = handle_vector(u)
 
@@ -57,22 +50,18 @@ class ExtendedKalmanFilter:
         self.P = self.F @ self.P @ self.F.T + self.Q
 
     def update(self, z, hx, h_jacobian, R=None, hx_args=(), hj_args=()):
-        """Update state estimate based on measurement z
+        """Updates the state estimate based on measurement z
 
-        Parameters
-        ----------
-        z : array_like
-            Measurement, shape (k, 1)
-        hx : callable
-            Measurement function, shape (n, 1) -> (k, 1)
-        h_jacobian : callable
-            Measurement Jacobian function, shape (k, n) -> (k, n)
-        R : array_like, optional
-            Measurement noise covariance, shape (k, k)
-        hx_args : tuple, optional
-            Additional arguments to pass to Hx
-        hj_args : tuple, optional
-            Additional arguments to pass to h_jacobian
+        Args:
+            z (array_like): Measurement, shape (k, 1)
+            hx (callable): Measurement function, shape (n, 1) -> (k, 1)
+            h_jacobian (callable): Measurement Jacobian function, shape (k, n) -> (k, n)
+            R (array_like, optional): Measurement noise covariance, shape (k, k)
+            hx_args (tuple, optional): Additional arguments to pass to Hx
+            hj_args (tuple, optional): Additional arguments to pass to h_jacobian
+
+        Raises:
+            ValueError: If z, hx, or h_jacobian have invalid shapes
         """
         z = handle_vector(z)
 
@@ -91,6 +80,6 @@ class ExtendedKalmanFilter:
         self.P = (self.I - K @ H) @ self.P
 
     def reset(self):
-        """Reset state estimate"""
+        """Resets the state estimate and error covariance to their initial values"""
         self.x = self.x0
         self.P = self.P0

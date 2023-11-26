@@ -29,7 +29,17 @@ def derivative_interp1d(x, y, deriv=1, window_length=5, polyorder=2, delta_x=Non
 
 
 def quick_plot(time: list, data: list, legends=None, x_labels=None, y_labels=None, titles=None, n_cols=2):
-    """Quickly plot a list of data series with Plotly and return a Figure object"""
+    """Plots a list of data series
+
+    Args:
+        time (list): List of time series.
+        data (list): List of data series.
+        legends (list): List of legend labels.
+        x_labels (str or list): X-axis label.
+        y_labels (str or list): Y-axis label.
+        titles (list): List of subplot titles.
+        n_cols (int): Number of columns in the figure.
+    """
 
     # validate input parameters
     if len(time) != 1 and len(time) != len(data):
@@ -102,7 +112,7 @@ def quick_plot(time: list, data: list, legends=None, x_labels=None, y_labels=Non
 
 
 def handle_vector(x):
-    """Convert a scalar or 1D array or a 2D row vector to 2D column vector."""
+    """Converts a scalar or 1D array or a 2D row vector to 2D column vector."""
     if np.isscalar(x):  # e.g. x = 1
         return np.atleast_2d(x)
     elif x.ndim == 1:  # e.g. x = np.array([1, 2, 3])
@@ -114,7 +124,7 @@ def handle_vector(x):
 
 
 def handle_matrix(x):
-    """Convert a scalar or a row vector to diagonal matrix."""
+    """Converts a scalar or a row vector to diagonal matrix."""
     if np.isscalar(x):  # e.g. x = 1
         return np.atleast_2d(x)
     elif x.ndim == 1:  # e.g. x = np.array([1, 2, 3])

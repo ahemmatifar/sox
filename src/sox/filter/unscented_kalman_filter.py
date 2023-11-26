@@ -5,21 +5,25 @@ from sox.utils import handle_matrix, handle_vector
 
 
 class MerweSigmaPoints:
-    """Sigma points for Unscented Kalman Filter
+    """Merwe's Scaled Sigma Point Generator
 
-    Parameters and Attributes
-    ----------
-    n : int
-        Dimensionality of the state. 2n+1 weights will be generated.
-    alpha : float
-        Spread of the sigma points around the mean. Typically, 1e-3.
-    beta : float
-        Used to incorporate prior knowledge of the distribution of the mean.
-        For Gaussian x, beta=2 is optimal, and corresponds to 95% confidence.
-    kappa : float
-        Secondary scaling parameter usually set to 0 or 3-n.
-    sqrt_method : callable
-        Function that computes the square root of a matrix. Defaults to scipy.linalg.cholesky.
+    Args:
+        n (int): Dimensionality of the state. 2n+1 weights will be generated.
+        alpha (float): Spread of the sigma points around the mean. Typically, 1e-3.
+        beta (float): Used to incorporate prior knowledge of the distribution of the mean.
+            For Gaussian x, beta=2 is optimal, and corresponds to 95% confidence.
+        kappa (float): Secondary scaling parameter usually set to 0 or 3-n.
+        sqrt_method (callable): Function that computes the square root of a matrix. Defaults to scipy.linalg.cholesky.
+
+    Attributes:
+        n (int): Dimensionality of the state. 2n+1 weights will be generated.
+        alpha (float): Spread of the sigma points around the mean. Typically, 1e-3.
+        beta (float): Used to incorporate prior knowledge of the distribution of the mean.
+            For Gaussian x, beta=2 is optimal, and corresponds to 95% confidence.
+        kappa (float): Secondary scaling parameter usually set to 0 or 3-n.
+        sqrt (callable): Function that computes the square root of a matrix. Defaults to scipy.linalg.cholesky.
+        wm (array_like): Weights for mean, shape (2n+1,)
+        wc (array_like): Weights for covariance, shape (2n+1,)
     """
 
     def __init__(self, n: int, alpha: float, beta: float, kappa: float, sqrt_method=None):
@@ -34,19 +38,14 @@ class MerweSigmaPoints:
         self.wm, self.wc = self.weights()
 
     def points(self, x, P):
-        """Generate sigma points for given mean and covariance
+        """Computes sigma points for given mean and covariance
 
-        Parameters
-        ----------
-        x : array_like
-            Mean vector, shape (n, 1)
-        P : array_like
-            Covariance matrix, shape (n, n)
+        Args:
+            x (array_like): Mean vector, shape (n, 1)
+            P (array_like): Covariance matrix, shape (n, n)
 
-        Returns
-        -------
-        sigmas : array_like
-            Sigma points, shape (n, 2n+1)
+        Returns:
+            sigmas (array_like): Sigma points, shape (n, 2n+1)
         """
         n = self.n
         if n != x.shape[0] or (n, n) != P.shape:
@@ -66,14 +65,14 @@ class MerweSigmaPoints:
         return sigma_points
 
     def weights(self):
-        """Compute weights for mean and covariance
+        """Computes weights for mean and covariance
 
-        Returns
-        -------
-        mean_weights : array_like
-            Weights for mean, shape (2n+1,)
-        cov_weights : array_like
-            Weights for covariance, shape (2n+1,)
+        Args:
+            None
+
+        Returns:
+            mean_weights (array_like): Weights for mean, shape (2n+1,)
+            cov_weights (array_like): Weights for covariance, shape (2n+1,)
         """
         n = self.n
         lambda_ = self.alpha**2 * (n + self.kappa) - n
@@ -89,18 +88,17 @@ class MerweSigmaPoints:
 
 
 def unscented_transform(sigma_points, wm, wc, noise_cov=None):
-    """Unscented transform
+    """Computes unscented transform of a set of sigma points and weights
 
-    Parameters
-    ----------
-    sigma_points : array_like
-        Sigma points, shape (n, 2n+1)
-    wm : array_like
-        Weights for mean, shape (2n+1,)
-    wc : array_like
-        Weights for covariance, shape (2n+1,)
-    noise_cov : array_like, optional
-        Covariance matrix for additive noise, shape (n, n)
+    Args:
+        sigma_points (array_like): Sigma points, shape (n, 2n+1)
+        wm (array_like): Weights for mean, shape (2n+1,)
+        wc (array_like): Weights for covariance, shape (2n+1,)
+        noise_cov (array_like, optional): Covariance matrix for additive noise, shape (n, n)
+
+    Returns:
+        mean (array_like): Mean of the transformed points, shape (n, 1)
+        cov (array_like): Covariance of the transformed points, shape (n, n)
     """
     mean = (sigma_points @ wm)[:, np.newaxis]  # shape (n, 1)
     y = sigma_points - mean  # shape (n, 2n+1)
@@ -111,28 +109,27 @@ def unscented_transform(sigma_points, wm, wc, noise_cov=None):
 
 
 class UnscentedKalmanFilter:
-    """Unscented Kalman Filter
+    """Unscented Kalman Filter (UKF)
 
-    Parameters and Attributes
-    ----------
-    Q : array_like
-        Process noise covariance, shape (n, n)
-    R : array_like
-        Measurement noise covariance, shape (k, k)
-    x0 : array_like
-        Initial state estimate, shape (n, 1)
-    P0 : array_like
-        Initial error covariance, shape (n, n)
-    sigma_gen : callable
-        Sigma point generator
-    sigmas_f : array_like
-        Predicted sigma points, shape (n, 2n+1)
-    sigmas_h : array_like
-        Measurement sigma points, shape (k, 2n+1)
-    wm : array_like
-        Weights for means, shape (2n+1,)
-    wc : array_like
-        Weights for covariance, shape (2n+1,)
+    Args:
+        Q (array_like): Process noise covariance, shape (n, n)
+        R (array_like): Measurement noise covariance, shape (k, k)
+        x0 (array_like): Initial state estimate, shape (n, 1)
+        P0 (array_like): Initial error covariance, shape (n, n)
+        sigma_gen (callable): Sigma point generator function
+
+    Attributes:
+        Q (array_like): Process noise covariance, shape (n, n)
+        R (array_like): Measurement noise covariance, shape (k, k)
+        x (array_like): Current state estimate, shape (n, 1)
+        P (array_like): Current error covariance, shape (n, n)
+        x0 (array_like): Initial state estimate, shape (n, 1)
+        P0 (array_like): Initial error covariance, shape (n, n)
+        sigma_gen (callable): Sigma point generator function
+        sigmas_f (array_like): Predicted sigma points, shape (n, 2n+1)
+        sigmas_h (array_like): Measurement sigma points, shape (k, 2n+1)
+        wm (array_like): Weights for means, shape (2n+1,)
+        wc (array_like): Weights for covariance, shape (2n+1,)
     """
 
     def __init__(self, Q, R, x0, P0, sigma_gen):
@@ -152,14 +149,11 @@ class UnscentedKalmanFilter:
         self.wc = sigma_gen.wc  # weights for covariance, shape (2n+1,)
 
     def predict(self, fx, fx_args=()):
-        """Predict step of the filter
+        """Predicts the next state of the filter given the current state and the state transition function
 
-        Parameters
-        ----------
-        fx : callable
-            State transition function, shape (n, 1) -> (n, 1)
-        fx_args : tuple, optional
-            Additional arguments to pass to fx
+        Args:
+            fx (callable): State transition function, shape (n, 1) -> (n, 1)
+            fx_args (tuple, optional): Additional arguments to pass to fx
         """
         if not isinstance(fx_args, tuple):
             fx_args = (fx_args,)
@@ -175,18 +169,13 @@ class UnscentedKalmanFilter:
         self.sigmas_f = self.sigma_gen.points(self.x, self.P)
 
     def update(self, z, hx, R=None, hx_args=()):
-        """Update step of the filter
+        """Updates the state estimate and covariance given a measurement vector and measurement function
 
-        Parameters
-        ----------
-        z : array_like
-            Measurement vector, shape (k, 1)
-        hx : callable
-            Measurement function, shape (n, 1) -> (k, 1)
-        R : array_like, optional
-            Measurement noise covariance, shape (k, k)
-        hx_args : tuple, optional
-            Additional arguments to pass to hx
+        Args:
+            z (array_like): Measurement vector, shape (k, 1)
+            hx (callable): Measurement function, shape (n, 1) -> (k, 1)
+            R (array_like, optional): Measurement noise covariance, shape (k, k)
+            hx_args (tuple, optional): Additional arguments to pass to hx
         """
         z = handle_vector(z)
 
@@ -215,7 +204,7 @@ class UnscentedKalmanFilter:
         self.P = self.P - K @ S @ K.T
 
     def reset(self):
-        """Reset the filter to its initial state"""
+        """Resets the filter to its initial state"""
         self.x = self.x0
         self.P = self.P0
         self.sigmas_f = self.sigma_gen.points(self.x, self.P)
