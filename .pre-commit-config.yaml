@@ -19,4 +19,4 @@ repos:
     rev: 0.6.0
     hooks:
       - id: nbstripout
-        files: src, docs
+        files: src, docs/tutorials
