@@ -21,26 +21,32 @@ c1_data = c1_data[0], (c1_data[1][0], c1_data[1][1] / scale_factor * 2)
 
 
 def open_circuit_voltage(soc):
+    """Open circuit voltage as a function of state of charge."""
     name, (x, y) = ocv_data
     return pb.Interpolant(x, y, soc, name, extrapolate=True)
 
 
 def r0(temperature, current, soc):
+    """Series resistance as a function of temperature, current and state of charge."""
     name, (x, y) = r0_data
     return pb.Interpolant(x, y, [temperature, current, soc], name, extrapolate=True)
 
 
 def r1(temperature, current, soc):
+    """Resistance of the first RC pair as a function of temperature, current and state of charge."""
     name, (x, y) = r1_data
     return pb.Interpolant(x, y, [temperature, current, soc], name, extrapolate=True)
 
 
 def c1(temperature, current, soc):
+    """Capacitance of the first RC pair as a function of temperature, current and state of charge."""
     name, (x, y) = c1_data
     return pb.Interpolant(x, y, [temperature, current, soc], name, extrapolate=True)
 
 
 def entropic_change(ocv, temperature):
+    """Entropic change in open circuit voltage as a function of open circuit voltage and
+    temperature."""
     name, (x, y) = dOCVdT_data
     return pb.Interpolant(x, y, [ocv, temperature], name, extrapolate=True)
 

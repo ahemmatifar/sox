@@ -19,4 +19,5 @@ and Unscented Kalman Filter (UKF).
 Get Started <get_started>
 Tutorial 1: Battery Cycling <tutorials/01 - battery cycling>
 Tutorial 2: SOC Estimation with EKF <tutorials/02 - soc estimation by ekf>
+Tutorial 3: SOC Estimation with UKF <tutorials/03 - soc estimation by ukf>
 ```

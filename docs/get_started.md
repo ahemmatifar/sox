@@ -2,12 +2,12 @@
 
 ## Installation
 1. Clone the repository `git clone https://github.com/ahemmatifar/sox.git`
-2. Change to project directory and install the project"
+2. Change to project directory and install the project
    ```bash
    cd sox
    make dev_install
    ```
-   Alternatively, you can install without `make`:
+   Alternatively, you can install without `make`
    ```bash
    cd sox
    python -m pip install --upgrade pip
