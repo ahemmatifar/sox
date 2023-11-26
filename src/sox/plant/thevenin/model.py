@@ -76,7 +76,9 @@ class Thevenin:
         Returns:
             Outputs: Thevenin model outputs.
         """
-        simulation = pb.Simulation(model=self.model, experiment=experiment, parameter_values=self._inputs)
+        simulation = pb.Simulation(
+            model=self.model, experiment=experiment, parameter_values=self._inputs, solver=pb.CasadiSolver()
+        )
         simulation.solve()
         solution = simulation.solution
         return Outputs(
