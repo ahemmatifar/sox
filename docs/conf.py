@@ -13,7 +13,7 @@ extensions = [
     "myst_nb",  # this replaces myst_parser and allows us to use jupyter notebooks
 ]
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", ".ipynb_checkpoints"]
 
 # Options for HTML output
 html_theme = "furo"

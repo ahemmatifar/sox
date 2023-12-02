@@ -1,3 +1,0 @@
-myst-nb
-furo
-sphinx-autoapi
