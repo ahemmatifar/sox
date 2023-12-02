@@ -25,6 +25,7 @@ napoleon_numpy_docstring = False
 
 # Options for myst-nb
 nb_execution_mode = "force"
+nb_execution_timeout = 300  # 5 minutes
 myst_enable_extensions = [
     "dollarmath",  # for inline math
 ]
