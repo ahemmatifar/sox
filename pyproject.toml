@@ -11,7 +11,7 @@ authors = [
 description = "Playground for exploring battery state estimation methods."
 readme = "README.md"
 dependencies = [
-    "pybamm",  # for battery models
+    "pybamm[all]",  # for battery models
     "jupyter",  # for notebooks
     "plotly",  # for plotting
     "matplotlib",  # for plotting
@@ -32,10 +32,6 @@ docs = [
     "sphinx-autoapi",  # for generating api docs
     "furo",  # for sphinx theme
     "myst-nb",  # for jupyter notebooks in sphinx
-]
-jax = [
-    "jax>=0.4,<=0.5",
-    "jaxlib>=0.4,<=0.5",
 ]
 
 [project.urls]
