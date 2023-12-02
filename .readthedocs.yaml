@@ -18,7 +18,7 @@ build:
     post_install:
       - pybamm_install_jax
 
-      # See https://docs.readthedocs.io/en/stable/guides/reproducible-builds.html
+# See https://docs.readthedocs.io/en/stable/guides/reproducible-builds.html
 python:
   install:
     - method: pip
