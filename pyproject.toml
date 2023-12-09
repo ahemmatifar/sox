@@ -34,6 +34,18 @@ docs = [
     "myst-nb",  # for jupyter notebooks in sphinx
 ]
 
+[tool.setuptools]
+include-package-data = true
+
+# List of files to include as package data
+[tool.setuptools.package-data]
+sox = [
+    "*.csv",
+    "*.txt",
+    "*.md",
+    "*.py",
+]
+
 [project.urls]
 Homepage = "https://github.com/ahemmatifar/sox"
 Issues = "https://github.com/ahemmatifar/sox/issues"
