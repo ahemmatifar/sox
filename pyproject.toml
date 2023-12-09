@@ -37,6 +37,9 @@ docs = [
 [tool.setuptools]
 include-package-data = true
 
+[tool.setuptools.packages.find]
+where = ["src"]
+
 # List of files to include as package data
 [tool.setuptools.package-data]
 sox = [
