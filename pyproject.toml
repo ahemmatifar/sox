@@ -42,12 +42,7 @@ where = ["src"]
 
 # List of files to include as package data
 [tool.setuptools.package-data]
-sox = [
-    "*.csv",
-    "*.txt",
-    "*.md",
-    "*.py",
-]
+"*" = ["*.csv", "*.txt", "*.md", "*.ipynb"]
 
 [project.urls]
 Homepage = "https://github.com/ahemmatifar/sox"
@@ -60,8 +55,7 @@ line-length = 120
 [tool.ruff]
 line-length = 120
 select = [
-    # isort
-    "I001"
+    "I001",  # isort
 ]
 
 [tool.mypy]
