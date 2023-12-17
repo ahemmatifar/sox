@@ -9,11 +9,10 @@ The project supports multiple state estimation methods, including Coulomb counti
 
 The project offers multiple sensor noise and fault models for exploration. Random noise models such as uniform, normal, Poisson, and exponential are available. Sensor faults include offset, scaling, drift, and stuck-at. These faults can be injected randomly or at any time during the simulation.
 
-Here is table of contents for the documentation:
 
+Documentation:
 - [Quick Start](https://sox.readthedocs.io/en/latest/get_started.html)
-- [Tutorials](https://sox.readthedocs.io/en/latest/tutorials.html)
+- [Tutorials](https://sox.readthedocs.io/en/latest/tutorials/index.html)
 - [API Reference](https://sox.readthedocs.io/en/latest/autoapi/index.html)
 
-
-Full documentation and tutorials can be found at [SOX Documentation](https://sox.readthedocs.io/en/latest/).
+Full documentation and tutorials can be found [here](https://sox.readthedocs.io/en/latest/).

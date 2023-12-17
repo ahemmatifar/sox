@@ -15,6 +15,6 @@ Table of contents:
 :maxdepth: 1
 
 🚀 Get Started <get_started>
-📖 Tutorials <tutorials>
+📖 Tutorials <tutorials/index>
 📦 Source Code <https://github.com/ahemmatifar/sox>
 ```
