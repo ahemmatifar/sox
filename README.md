@@ -1,14 +1,19 @@
-# SOX
+# 🧦 SOX
+
 Playground for exploring battery state estimation methods.
 
-This project provides a simple playground for running battery state of charge estimation methods with 
+[SOX](https://sox.readthedocs.io/en/latest/) provides a simple playground for running battery state of charge estimation methods with 
 simulated cycling data and sensor noise and fault injection. 
 
-Multiple sensor noise and fault models available for exploration. Random noise models include
-uniform, normal, Poisson and exponential. Sensor faults include offset, scaling, drift, and stuck-at. Faults 
-can be injected randomly, or at any time during the simulation.
+The project supports multiple state estimation methods, including Coulomb counting (CC), Extended Kalman Filter (EKF), and Unscented Kalman Filter (UKF).
 
-State estimation methods currently supported include Coulomb counting (CC), Extended Kalman Filter (EKF), 
-and Unscented Kalman Filter (UKF).
+The project offers multiple sensor noise and fault models for exploration. Random noise models such as uniform, normal, Poisson, and exponential are available. Sensor faults include offset, scaling, drift, and stuck-at. These faults can be injected randomly or at any time during the simulation.
 
-Documentation and tutorials can be found at [SOX Documentation](https://sox.readthedocs.io/en/latest/).
+Here is table of contents for the documentation:
+
+- [Quick Start](https://sox.readthedocs.io/en/latest/get_started.html)
+- [Tutorials](https://sox.readthedocs.io/en/latest/tutorials.html)
+- [API Reference](https://sox.readthedocs.io/en/latest/autoapi/index.html)
+
+
+Full documentation and tutorials can be found at [SOX Documentation](https://sox.readthedocs.io/en/latest/).
